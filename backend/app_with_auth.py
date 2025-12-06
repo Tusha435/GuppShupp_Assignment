@@ -26,9 +26,10 @@ load_dotenv()
 
 app = Flask(
     __name__,
-    static_folder="frontend_build/static",  # where CSS/JS live
-    static_url_path="/static"              # they are requested as /static/...
-)CORS(app, supports_credentials=True)
+    static_folder="frontend_build/static",
+    static_url_path="/static"
+)
+CORS(app, supports_credentials=True)    # ✅ correct
 
 # Initialize components
 memory_extractor = MemoryExtractor()
