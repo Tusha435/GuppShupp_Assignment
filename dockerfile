@@ -2,14 +2,14 @@
 FROM python:3.11-slim AS backend
 
 WORKDIR /app/backend
-COPY ./backend /app/backend
+COPY ./backend /backend
 
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Frontend build
 FROM node:18 AS frontend
-WORKDIR /app/frontend
-COPY ./frontend /app/frontend
+WORKDIR /frontend
+COPY ./frontend /frontend
 
 RUN npm install && npm run build
 
@@ -27,3 +27,4 @@ COPY --from=frontend /app/frontend/dist ./static
 EXPOSE 5000
 
 CMD ["python", "app.py"]
+
