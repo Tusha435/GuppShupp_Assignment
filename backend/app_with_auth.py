@@ -24,8 +24,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__)
-CORS(app, supports_credentials=True)
+app = Flask(
+    __name__,
+    static_folder="frontend_build/static",  # where CSS/JS live
+    static_url_path="/static"              # they are requested as /static/...
+)CORS(app, supports_credentials=True)
 
 # Initialize components
 memory_extractor = MemoryExtractor()
@@ -42,7 +45,14 @@ chat_histories = {}
 # ==================== PUBLIC ENDPOINTS ====================
 @app.route("/")
 def serve_frontend():
-    return send_from_directory(app.static_folder, "index.html")
+    # /app/frontend_build/index.html inside the container
+    return send_from_directory("frontend_build", "index.html")
+
+
+# Serve manifest.json for CRA
+@app.route("/manifest.json")
+def manifest():
+    return send_from_directory("frontend_build", "manifest.json")
 
 @app.route('/health', methods=['GET'])
 def health():
