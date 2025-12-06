@@ -1,43 +1,32 @@
-# ---------- Backend build (Flask) ----------
-FROM python:3.11-slim AS backend
-
-WORKDIR /app/backend
-
-# Copy backend code from ./backend
-COPY backend/ /app/backend/
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-
 # ---------- Frontend build (React) ----------
 FROM node:18 AS frontend
 
 WORKDIR /app/frontend
 
-# Copy frontend code from ./frontend
-COPY frontend/ /app/frontend/
+# Copy frontend code
+COPY frontend/ ./
 
 RUN npm install
-RUN npm run build   # if your build output is 'build', we handle that below
+RUN npm run build    # assumes build output = ./build
 
 
-# ---------- Final runtime image ----------
+# ---------- Backend + runtime (Flask) ----------
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy backend app
-COPY --from=backend /app/backend/ .
+# Copy backend code
+COPY backend/ ./ 
 
-# Copy React build into a folder Flask can serve.
-# If your React build output folder is 'build' (Create React App default),
-# this is correct:
+# Install Python deps (includes Flask)
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy built React app into ./static (or wherever you serve from)
 COPY --from=frontend /app/frontend/build ./static
 
 ENV PYTHONUNBUFFERED=1
 
 EXPOSE 5000
 
-# Change this if your main file is named differently
+# If your entry file is app_with_auth.py, change app.py below
 CMD ["python", "app.py"]
