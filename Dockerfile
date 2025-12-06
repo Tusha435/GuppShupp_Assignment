@@ -29,4 +29,5 @@ ENV PYTHONUNBUFFERED=1
 EXPOSE 5000
 
 # If your entry file is app_with_auth.py, change app.py below
-CMD ["python", "app.py"]
+CMD ["python", "app_with_auth.py"]
+
