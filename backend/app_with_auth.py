@@ -40,6 +40,9 @@ chat_histories = {}
 
 
 # ==================== PUBLIC ENDPOINTS ====================
+@app.route("/")
+def serve_frontend():
+    return send_from_directory(app.static_folder, "index.html")
 
 @app.route('/health', methods=['GET'])
 def health():
