@@ -4,7 +4,7 @@ Users: Full chat access, NO log viewing
 Admins: Full access + secret monitoring of all users
 """
 
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, send_from_directory
 from flask_cors import CORS
 from memory_extractor import MemoryExtractor
 from personality_engine import PersonalityEngine
